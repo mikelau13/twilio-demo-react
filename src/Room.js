@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Video from 'twilio-video';
+import Participant from './Participant';
 
 const Room = ({ roomName, token, handleLogout }) => {
   const [room, setRoom] = useState(null);
@@ -28,7 +29,7 @@ const Room = ({ roomName, token, handleLogout }) => {
       room.participants.forEach(participantConnected);
     }, error => {
       console.log(error);
-      alert('Could not connect to Twilio: ' + error.message);
+      alert('Could not connect to Twilio: ' + error.message); // TODO: usually when error message is DOM requested not found, then it's because microphones/camera not connected 
     });
 
     return () => {
@@ -55,7 +56,10 @@ const Room = ({ roomName, token, handleLogout }) => {
       <button onClick={handleLogout}>Log out</button>
       <div className="local-participant">
         {room ? (
-          <p key={room.localParticipant.sid}>{room.localParticipant.identity}</p>
+          <Participant
+            key={room.localParticipant.sid}
+            participant={room.localParticipant}
+          />
         ) : (
           ''
         )}
